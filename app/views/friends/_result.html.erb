@@ -1,0 +1,75 @@
+<!-- 1: Restricting below flash messages to be appear twice for 
+actions other then search -->
+<% if(params[:action] == "search") %>
+    <div class = "result-block">
+        <%= bootstrap_flash() %>
+    </div>
+<% end %>
+
+<!-- 2: For showing users who are not still a friend -->
+<% if(!@users.blank?()) %>
+  <div id="friend-lookup-results" class="well results-block col-md-10">
+    <table class="search-results-table col-md-12">
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td><strong>Name:</strong> <%= user.full_name %></td>
+            <td><strong>Email:</strong> <%= user.email %></td>
+            <td><strong>Profile:</strong> <%= link_to("View Profile", user_path(user),
+                                            class: "btn btn-xs btn-success") %>
+              <% if(current_user.not_friends_with?(user.id)) %>
+                <%= link_to "Add as my friend", 
+                        add_friend_path(user: current_user, friend: user),
+                          class: "btn btn-xs btn-success", method: :post %>
+              <% else %>
+                <span class="label label-primary">
+                  You are friends
+                </span>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
+
+<!-- 3: For showing friends -->
+<% if(current_user.friends) %>
+    <table class = "table table-striped">
+        <thead>
+            <tr>
+                <th colspan = "3" class = "page-header">
+                    <h2>My Friends</h2>
+                </th>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Actions</th>
+            </tr>
+        <thead>
+        <tbody>
+            <% current_user.friends.each do |friend| %>
+                <tr>
+                    <td><%= friend.full_name() %></td>
+                    <td><%= friend.email %></td>
+                    <td>
+                        <%= link_to("View profile", user_path(friend),
+                        class: "btn btn-primary btn-xs") %>
+                        <%= link_to("Remove friend", friendship_path(friend), 
+                        method: :delete, data: {confirm: "Are you sure?"}, 
+                        class: "btn btn-xs btn-danger") %>
+                        <!-- 1: Must check in below url for params of 
+                        destroy action -->
+                    </td>    
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+<% else %>
+    <div class = "row col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <p class = "lead">You don't have any friends yet, please add 
+        some!</p>
+    </div>
+<% end %>

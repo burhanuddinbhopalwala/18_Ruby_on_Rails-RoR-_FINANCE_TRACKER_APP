@@ -1,0 +1,28 @@
+<h3>Search for friends</h3>
+<div id = "friend-lookup">
+    <%= form_tag(search_friends_path(), method: :get, remote: true,
+        id: "stock-lookup-form") do %>
+        <!-- 1: "remote: true" for AJAX xhr request instead of HTTP
+        request and load the entire page -->
+        <div class = "row form-group no-padding text-center 
+        col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class = "col-xs-10 col-sm-10 col-md-10 col-lg-10">
+                <%= text_field_tag(:search_param, params[:search_param], placeholder:
+                "Stock ticker symbol", autofocus: true, class: "form-control search-box
+                input-lg") %>
+            </div>
+
+            <div class = "col-xs-2 col-sm-2 col-md-2 col-lg-2">
+                <%= button_tag(type: :submit, class: "btn btn-lg 
+                btn-success") do %>
+                    <i class = "fa fa-search"></i> Search 
+                <% end %>
+            </div>
+        </div> 
+    <% end %>
+</div>
+
+<!-- 2: Sepertae div for ajax handling -->
+<div id = "result">
+    <%= render("friends/result") %>
+</div>
