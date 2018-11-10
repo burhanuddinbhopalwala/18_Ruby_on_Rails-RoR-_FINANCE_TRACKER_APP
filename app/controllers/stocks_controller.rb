@@ -1,6 +1,6 @@
 class StocksController < ApplicationController 
     def search()
-        if(params[:stock].blank?())
+        if(!params[:stock].present?())
             # flash[:danger] = "You have entered an empty search string"
             # Below is for ajax request handling
             flash.now[:danger] = "You have entered an empty search string"    
